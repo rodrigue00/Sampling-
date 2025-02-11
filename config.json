@@ -1,0 +1,4 @@
+{
+  "file_path": "data/sample.csv", // Chemin du fichier à charger (modifiez selon votre fichier)
+  "file_type": "csv" // Type du fichier : "csv", "json" ou "excel"
+}
