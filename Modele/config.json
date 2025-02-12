@@ -1,0 +1,14 @@
+{
+  "file_path": "data/sample.csv",
+  "file_type": "csv",
+  "sampling": true,
+  "sampling_fraction": 0.2,
+  "train_test_split": true,
+  "test_size": 0.2,
+  "random_state": 42,
+  "use_optuna": true,
+  "n_trials": 50,
+  "retrain_with_best_params": true,
+  "save_best_model": true,
+  "model_save_path": "best_model.pkl"
+}
