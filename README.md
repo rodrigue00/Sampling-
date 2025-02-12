@@ -88,6 +88,7 @@ Le projet repose sur plusieurs bibliothèques Python :
 
 ````frapper
 clone git https://github.com/rodrigue00/Sampling-.git
+````
 
 2️⃣ Créez un environnement virtuel pour les dépendances Python :
 ```frapper
@@ -106,46 +107,30 @@ pip install -r requirements.txt
 ```Avec échantillonnage :
 python script_sampled.py
 ```
-
 ```Sans échantillonnage :
-        python script_full.py
+python script_full.py
 ```
-
 ---
+## 📖 Documentation et planning
 
-## 📖 documentation_and_planning:
-
-documentation: "📌 [Documentation Technique](https://www.overleaf.com/project/67ac5bf7920ebce02e127931")
-planning: "📅 [Planning de Stage (https://www.overleaf.com/project/67ac5bf7920ebce02e127931")
-
+- **Documentation et planning  ** : https://www.overleaf.com/project/67ac5bf7920ebce02e127931
 ---
-
 ## 🤝 Contributeurs
 
-- name: "Yando rodrigue"
-  Superviseur: "Monsieur Gilles perrouin et Paul Temple"
-  stage_dates: "03 février - 30 mai"
-
+- name: Yando rodrigue
+- Superviseur: Monsieur Gilles perrouin et Paul Temple
+- stage_dates: 03 février - 30 mai
 ---
-
 ## 📜 Licence
-
-t
-ype: "MIT"
-description: "Projet sous licence MIT."
-
+Ce projet est sous licence[Licence MIT](LICENCE).
 ---
 
 ## 📩 contact:
 
 📧 Email : "rodrigue.yandodjamen@student.unamur.be"
-
 ---
 
 ### **📌 Explications et Améliorations**
 
-## ✔ **Ajout d’un titre clair et professionnel** : `.
+## ✔ Ajout d’un titre clair et professionnel: 
 
-```
-
-```
