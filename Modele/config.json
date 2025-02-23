@@ -1,12 +1,51 @@
 {
-    "file_path": "data/sample.csv",
-    "file_type": "csv",
-    "train_test_split": true,
-    "test_size": 0.2,
-    "random_state": 42,
-    "use_optuna": true,
-    "n_trials": 50,
-    "retrain_with_best_params": true,
-    "save_best_model": true,
-    "best_model_path": "best_model.pkl"
+  "file_path": "data/iris.csv",
+  "random_state": 42,
+
+  "sampling": {
+    "enabled": true,
+    "fraction": 0.2
+  },
+
+  "train_test_split": {
+    "enabled": true,
+    "test_size": 0.2
+  },
+
+  "models": {
+    "Decision Tree": {
+      "enabled": false,
+      "max_depth": 10
+    },
+    "Random Forest": {
+      "enabled": true,
+      "n_estimators": 100,
+      "max_depth": 15
+    },
+    "SVM": {
+      "enabled": false,
+      "C": 1.0,
+      "kernel": "rbf"
+    },
+    "Neural Network": {
+      "enabled": false,
+      "hidden_layer_sizes": [100],
+      "learning_rate_init": 0.001
+    },
+    "XGBoost": {
+      "enabled": false,
+      "n_estimators": 100,
+      "max_depth": 6,
+      "learning_rate": 0.1
+    }
+  },
+
+  "use_optuna": true,
+  "n_trials": 50,
+
+  "retrain_with_best_params": true,
+
+  "save_best_model": true,
+  "model_save_path": "best_model.pkl",
+  "target_column": "species"
 }
