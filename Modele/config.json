@@ -4,6 +4,7 @@
 
   "sampling": {
     "enabled": true,
+    "sampling_type": "random", // ou "gmm"
     "fraction": 0.2
   },
 
@@ -14,7 +15,7 @@
 
   "models": {
     "Decision Tree": {
-      "enabled": false,
+      "enabled": true,
       "max_depth": 10
     },
     "Random Forest": {
@@ -23,17 +24,17 @@
       "max_depth": 15
     },
     "SVM": {
-      "enabled": false,
+      "enabled": true,
       "C": 1.0,
       "kernel": "rbf"
     },
     "Neural Network": {
-      "enabled": false,
+      "enabled": true,
       "hidden_layer_sizes": [100],
       "learning_rate_init": 0.001
     },
     "XGBoost": {
-      "enabled": false,
+      "enabled": true,
       "n_estimators": 100,
       "max_depth": 6,
       "learning_rate": 0.1
@@ -47,5 +48,10 @@
 
   "save_best_model": true,
   "model_save_path": "best_model.pkl",
-  "target_column": "species"
+  "target_column": "species",
+
+  "gmm": {
+    "n_components_range": [1, 2, 3, 4, 5],
+    "covariance_types": ["full", "tied", "diag", "spherical"]
+  }
 }
