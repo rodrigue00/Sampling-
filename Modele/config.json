@@ -4,7 +4,7 @@
 
   "sampling": {
     "enabled": true,
-    "sampling_type": "random", // ou "gmm"
+    "sampling_type": "random",
     "fraction": 0.2
   },
 
@@ -15,21 +15,21 @@
 
   "models": {
     "Decision Tree": {
-      "enabled": true,
+      "enabled": false,
       "max_depth": 10
     },
     "Random Forest": {
-      "enabled": true,
+      "enabled": false,
       "n_estimators": 100,
       "max_depth": 15
     },
     "SVM": {
-      "enabled": true,
+      "enabled": false,
       "C": 1.0,
       "kernel": "rbf"
     },
     "Neural Network": {
-      "enabled": true,
+      "enabled": false,
       "hidden_layer_sizes": [100],
       "learning_rate_init": 0.001
     },

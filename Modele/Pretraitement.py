@@ -1,3 +1,10 @@
+"sampling": {
+    "enabled": false,
+    "sampling_type": "gmm or random",
+    "fraction": 0.2
+  },
+
+
 #Pretraitement de données de Iris
 Description du Jeu de Données Iris 
 Le jeu de données Iris contient des mesures de 150 fleurs appartenant à trois espèces d'iris:
