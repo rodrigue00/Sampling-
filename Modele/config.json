@@ -1,11 +1,27 @@
 {
-  "file_path": "data/iris.csv",
-  "random_state": 42,
+  "file_path": "data/dataP/preprocessed_iris_dataset.csv",
+  "random_state": 0,
 
   "sampling": {
     "enabled": true,
-    "sampling_type": "random",
-    "fraction": 0.2
+    "fraction": 0.2,
+
+    "gmm": {
+      "enabled": false,
+      "n_components_range": [1, 2, 3, 4, 5],
+      "covariance_types": ["full", "tied", "diag", "spherical"]
+    },
+
+    "random": {
+      "enabled": false
+    },
+
+    "ddbs": {
+      "enabled": true,
+      "percentage_per_class": 0.2,
+      "distance_metric": "euclidean",
+      "distribution_type": "geometric"
+    }
   },
 
   "train_test_split": {
@@ -50,8 +66,5 @@
   "model_save_path": "best_model.pkl",
   "target_column": "species",
 
-  "gmm": {
-    "n_components_range": [1, 2, 3, 4, 5],
-    "covariance_types": ["full", "tied", "diag", "spherical"]
-  }
+  "num_iterations": 2
 }
