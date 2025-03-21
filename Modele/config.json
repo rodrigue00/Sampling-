@@ -62,7 +62,7 @@
 
   "retrain_with_best_params": true,
 
-  "save_best_model": true,
+  "save_best_model": false,
   "model_save_path": "best_model.pkl",
   "target_column": "species",
 

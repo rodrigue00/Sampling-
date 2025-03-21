@@ -23,134 +23,93 @@ Nombre de Lignes et de Colonnes
 Le jeu de données comprend 27901 observations, et 18 colonnes.
 
     """
-
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
 # Définition du chemin du fichier
 file_path = 'data/Student Depression Dataset.csv'
+output_file = 'data/preprocessed_student_depression_dataset.csv'
 
 try:
     # Chargement du dataset
     df = pd.read_csv(file_path)
     print("Données chargées avec succès.")
 
-    # Définition de la colonne cible
-    target_column = "Depression"
+    # Vérification et suppression de la colonne 'id' si elle existe
+    if 'id' in df.columns:
+        df.drop(columns=['id'], inplace=True)
+        print("Colonne 'id' supprimée.")
 
-    # Vérification si la colonne cible existe
+    # Vérification de la présence de la colonne cible
+    target_column = "Depression"
     if target_column not in df.columns:
         raise ValueError(f"La colonne cible '{target_column}' est absente des données.")
     print(f"Colonne cible définie : {target_column}")
 
-    # Suppression de la colonne 'id' si elle existe
-    if 'id' in df.columns:
-        df.drop(['id'], axis=1, inplace=True)
-        print("Colonne 'id' supprimée.")
-
-    # Encodage de la variable 'Gender' en 0 et 1
+    # Encodage de la variable 'Gender'
     if 'Gender' in df.columns:
         df['Gender'] = df['Gender'].map({'Male': 1, 'Female': 0})
         print("Encodage de 'Gender' en 0 et 1 effectué.")
 
-    # Encodage des variables ordinales avec LabelEncoder
-    enc = LabelEncoder()
+    # Encodage des variables ordinales
     ordinal_columns = ['City', 'Profession', 'Sleep Duration', 'Dietary Habits', 'Degree', 'Financial Stress']
-    
+    enc = LabelEncoder()
     for col in ordinal_columns:
         if col in df.columns:
-            df[col] = enc.fit_transform(df[col].astype(str))  # Conversion en str pour éviter les erreurs
+            df[col] = enc.fit_transform(df[col].astype(str))
             print(f"Encodage de '{col}' effectué.")
 
-    # Encodage des variables binaires en 0 et 1
+    # Encodage des variables binaires
     binary_columns = ['Family History of Mental Illness', 'Have you ever had suicidal thoughts ?']
-    
     for col in binary_columns:
         if col in df.columns:
             df[col] = df[col].map({'Yes': 1, 'No': 0})
             print(f"Encodage de '{col}' en 0 et 1 effectué.")
 
-    # Définition du chemin de sortie
-    output_file = 'data/preprocessed_student_depression_dataset.csv'
-    
     # Sauvegarde du dataset prétraité
     df.to_csv(output_file, index=False)
-    print(f"\nNouveau fichier CSV enregistré sous '{output_file}'.")
-
-    # Affichage des premières lignes du dataset prétraité
-    import ace_tools as tools
-    tools.display_dataframe_to_user(name="Dataset Prétraité", dataframe=df)
+    print(f"Nouveau fichier CSV enregistré sous '{output_file}'.")
 
 except FileNotFoundError:
     print(f"Erreur : Le fichier '{file_path}' est introuvable. Vérifie le chemin du fichier.")
 except Exception as e:
     print(f"Une erreur est survenue : {e}")
 
+# Deuxième partie : Transformation et encodage supplémentaires
 
+# Chargement du dataset prétraité
+df = pd.read_csv(output_file)
+print("Données prétraitées chargées avec succès.")
 
-
-
-
-
-
-
-
-
-
-
-
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-
-# Définition du chemin du fichier
-file_path = 'data/preprocessed_student_depression_dataset.csv'
-
-# Chargement du dataset
-df = pd.read_csv(file_path)
-print("Données chargées avec succès.")
-
-# Vérifier si la colonne "Age" existe
+# Catégorisation de l'âge
 if 'Age' in df.columns:
-    # Définir les nouvelles catégories d'âge avec des intervalles plus précis
-    bins = [0, 12, 17, 25, 65, 100]  # Définition des intervalles
-    labels = ['Enfant', 'Adolescence', 'Jeune', 'Adulte', 'Senior']  # Noms des catégories
-
-    # Appliquer la catégorisation sur la colonne Age
-    df['Age_cat'] = pd.cut(df['Age'], bins=bins, labels=labels)
-
-    # Appliquer One-Hot Encoding sur la colonne 'Age_cat' (nom corrigé)
-    df_encoded = pd.get_dummies(df, columns=['Age_cat']).astype(int)
-
-    # Afficher les données mises à jour
-    from IPython.display import display
-    display(df_encoded)
+    age_bins = [0, 12, 17, 25, 65, 100]
+    age_labels = ['Enfant', 'Adolescence', 'Jeune', 'Adulte', 'Senior']
+    df['Age_cat'] = pd.cut(df['Age'], bins=age_bins, labels=age_labels)
+    df = pd.get_dummies(df, columns=['Age_cat'], dtype=int)
+    print("Catégorisation et encodage One-Hot de l'âge effectués.")
+    
+    # Réorganisation des colonnes
+    colonnes = list(df.columns)
+    colonnes_age_cat = [col for col in colonnes if col.startswith('Age_cat_')]
+    position_age = colonnes.index('Age') if 'Age' in colonnes else -1
+    if position_age != -1:
+        colonnes.remove('Age')
+        colonnes = colonnes[:position_age] + colonnes_age_cat + colonnes[position_age:]
+    df = df[colonnes]
+    df.drop(columns=['Age'], inplace=True, errors='ignore')
+    print("Colonne 'Age' supprimée après transformation.")
 else:
     print("Erreur : La colonne 'Age' est introuvable dans le dataset.")
 
+# Encodage One-Hot de plusieurs colonnes catégoriques
+ohe_columns = ['Academic Pressure', 'Work Pressure', 'Job Satisfaction', 'Sleep Duration', 'Study Satisfaction', 'Dietary Habits', 'Financial Stress']
+for col in ohe_columns:
+    if col in df.columns:
+        df = pd.get_dummies(df, columns=[col], dtype=int)
+        print(f"Encodage One-Hot de '{col}' effectué.")
 
-# réordonne 
-# Liste de toutes les colonnes du DataFrame
-colonnes = list(df_encoded.columns)
-
-# Identifier les colonnes créées par One-Hot Encoding pour Age_cat
-colonnes_age_cat = [col for col in colonnes if col.startswith('Age_cat_')]
-
-# Supprimer ces colonnes de la liste initiale
-for col in colonnes_age_cat:
-    colonnes.remove(col)
-
-# Trouver la position de la colonne 'Age'
-position_age = colonnes.index('Age')
-
-# Insérer les colonnes encodées juste après 'Age'
-for i, col in enumerate(colonnes_age_cat):
-    colonnes.insert(position_age + 1 + i, col)
-
-# Réordonner le DataFrame selon la nouvelle liste de colonnes
-df_reorganise = df_encoded[colonnes]
-
-# Afficher le DataFrame réorganisé
-from IPython.display import display
-display(df_reorganise)
+# Sauvegarde du dataset transformé
+df.to_csv(output_file, index=False)
+print("Les modifications ont été enregistrées avec succès dans le fichier :", output_file)

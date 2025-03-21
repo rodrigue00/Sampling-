@@ -57,6 +57,30 @@ columns = [
 results_df = pd.DataFrame(columns=columns)
 
 
+
+#  Définition du fichier log pour les résultats
+log_file = "results_log.txt"
+
+def save_results(iteration_results):
+    """
+    Ajoute les résultats d'une itération dans `results_log.txt`
+    sans recréer le fichier à chaque fois.
+    """
+    try:
+        if not os.path.exists(log_file):
+            with open(log_file, "w", encoding="utf-8") as f:
+                f.write("Log des résultats\n\n")
+
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(json.dumps(iteration_results, indent=4, ensure_ascii=False) + "\n\n")
+
+        print(f"Résultats enregistrés dans {log_file}")
+
+    except Exception as e:
+        print(f" Erreur lors de l'enregistrement des résultats : {e}")
+
+
+
 # Exécuter 30 itérations
 
 for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours"):
@@ -69,6 +93,9 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
 
     # Division des données
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+
+    # CONSERVER les données SANS échantillonnage pour les comparer plus tard
+    X_train_no_sampling, y_train_no_sampling = X_train.copy(), y_train.copy()
     
     #  Appliquer le sampling UNIQUEMENT sur les données d'entraînement
     start_sampling_time = time.time()
@@ -109,8 +136,15 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
         sampling_status = "Non"
         print(" Aucun échantillonnage appliqué, utilisation des données complètes.")
 
-    # Sélectionner les bonnes données d'entraînement (avec ou sans échantillonnage)
+
+
+   # Sélectionner les bonnes données d'entraînement (avec ou sans échantillonnage)
     X_train_used, y_train_used = (X_train_sampled, y_train_sampled) if config["sampling"]["enabled"] else (X_train, y_train)
+    
+
+    # Sélectionner les bonnes données d'entraînement 
+    X_train_sampling, y_train_sampling = X_train_sampled, y_train_sampled  # AVEC sampling
+
 
     # Calcul du temps pris pour le sampling
     sampling_time = round(time.time() - start_sampling_time , 2) # Calcul du temps pris par le sampling
@@ -120,18 +154,34 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
     num_train_used  = len(X_train_used)
     num_test_used  = len(X_test) # Le test set reste inchangé
 
+    num_train_no_sampling = len(X_train_no_sampling)  # Taille des données sans échantillonnage
+
+
     print(f"\nDonnées après échantillonnage (Train) : {num_train_used } échantillons.")
     print(f"Données de test non modifiées : {num_test_used } échantillons.")
+    
+    print(f" Données sans échantillonnage (Train) : {num_train_no_sampling} échantillons.")
     
     # Calcul du pourcentage des données après échantillonnage
     train_percent = (num_train_used / len(df)) * 100
     test_percent = (num_test_used / len(df)) * 100
+
+    train_percent_no_sampling = (num_train_no_sampling / len(df)) * 100
+
     
     print(f"\n Pourcentage Entraînement : {train_percent:.2f}%")
     print(f" Pourcentage Test : {test_percent:.2f}%")
 
+    print(f" Pourcentage Entraînement (Sans Sampling) : {train_percent_no_sampling:.2f}%")
+
+
 
     # Initialiser les modèles
+
+
+    models_no_sampling = {}  # Modèles entraînés SANS échantillonnage
+    models_sampling = {}  # Modèles entraînés AVEC échantillonnage
+    
     models = {}
     for model_name, model_params in config["models"].items():
         if model_params["enabled"]:
@@ -164,14 +214,60 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
         start_train_time = time.time()  # Début du chronométrage de l'entraînement avant optimisation
         model.fit(X_train_used, y_train_used)
         train_time_before = round(time.time() - start_train_time , 2)  # Temps pris pour l'entraînement avant optimisation
+
+        # Entraînement du modèle SANS échantillonnage
+        model.fit(X_train_no_sampling, y_train_no_sampling)
+        y_pred_no_sampling = model.predict(X_test)
+        
+
+        #  Entraînement du modèle AVEC échantillonnage
+        model.fit(( X_train_sampling, y_train_sampling)
+        y_pred_sampling = model.predict(X_test)
+
+
+        #  Comparaison des scores avant optimisation
+        accuracy_no_sampling = accuracy_score(y_test, y_pred_no_sampling)
+        f1_no_sampling = f1_score(y_test, y_pred_no_sampling, average="weighted")
+
+        accuracy_sampling = accuracy_score(y_test, y_pred_sampling)
+        f1_sampling = f1_score(y_test, y_pred_sampling, average="weighted")
+
+
+
+        print(f"\n 📊 Comparaison des résultats avant optimisation pour '{model_name}':")
+        print(f"   - Accuracy (Sans Sampling) : {accuracy_no_sampling:.4f}")
+        print(f"   - Accuracy (Avec Sampling) : {accuracy_sampling:.4f}")
+        print(f"   - F1-score (Sans Sampling) : {f1_no_sampling:.4f}")
+        print(f"   - F1-score (Avec Sampling) : {f1_sampling:.4f}")
+
+        similarity_percentage = np.mean(y_pred_sampling == y_pred_no_sampling) * 100
+
+        print(f"   - Similarité des prédictions entre modèles : {similarity_percentage:.2f}%")
+        
+
+        #  Calcul des scores sur TRAIN
+        y_train_pred = model.predict(X_train_used)
+        train_accuracy = accuracy_score(y_train_used, y_train_pred)
+        train_f1 = f1_score(y_train, y_train_pred, average="weighted")
+
+        #  Calcul des scores sur TEST
         y_pred = model.predict(X_test)
         accuracy_before = accuracy_score(y_test, y_pred)
         f1_before = f1_score(y_test, y_pred, average="weighted")
         
         print(f"\n Résultats du modèle '{model_name}' avant optimisation :")
+        print(f"   - Accuracy Train: {train_accuracy:.4f}")
         print(f"   - Accuracy Test: {accuracy_before:.4f}")
+        print(f"   - F1-score Train: {train_f1:.4f}")
         print(f"   - F1-score Test: {f1_before:.4f}")
 
+        #  Vérification de l'overfitting / underfitting
+        if train_accuracy > accuracy_before + 0.10:
+            print(" Overfitting détecté !")
+        elif train_accuracy < 0.7 and accuracy_before < 0.7:
+            print(" Underfitting détecté !")
+        else:
+            print(" Bon équilibre entre biais et variance.")
 
         best_params = {}
         best_model = model
@@ -202,7 +298,9 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
                     model_opt = XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate)
 
                 
-                model_opt.fit(X_train_used, y_train_used)
+                model_opt.fit((X_train_no_sampling, y_train_no_sampling)
+                model_opt.fit( X_train_sampling, y_train_sampling)
+                 model_opt.fit(X_train_used, y_train_used)
                 y_pred_opt = model_opt.predict(X_test)
                 return accuracy_score(y_test, y_pred_opt)
 
@@ -218,15 +316,63 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
                 best_model = model.__class__(**best_params)
                 best_model.fit(X_train_used, y_train_used)
                 train_time_after = round(time.time() - start_train_time_after, 2) # Temps pris pour l'entraînement après optimisation
-                y_pred_opt = best_model.predict(X_test)
+
+
                 
+                # Entraînement du modèle SANS échantillonnage
+                best_model.fit(X_train_no_sampling, y_train_no_sampling)
+                y_pred_no_sampling_opt =  best_model.predict(X_test)
+                
+        
+                #  Entraînement du modèle AVEC échantillonnage
+                best_model.fit(( X_train_sampling, y_train_sampling)
+                y_pred_sampling_opt =  best_model.predict(X_test)
+        
+        
+                #  Comparaison des scores avant optimisation
+                accuracy_no_sampling_opt = accuracy_score(y_test, y_pred_no_sampling)
+                f1_no_sampling = f1_score(y_test, y_pred_no_sampling, average="weighted")
+        
+                accuracy_sampling_opt = accuracy_score(y_test, y_pred_sampling)
+                f1_sampling = f1_score(y_test, y_pred_sampling, average="weighted")
+        
+        
+        
+                print(f"\n  Comparaison des résultats avant optimisation pour '{model_name}':")
+                print(f"   - Accuracy (Sans Sampling) : {accuracy_no_sampling_opt:.4f}")
+                print(f"   - Accuracy (Avec Sampling) : {accuracy_sampling_opt:.4f}")
+                print(f"   - F1-score (Sans Sampling) : {f1_no_sampling_opt:.4f}")
+                print(f"   - F1-score (Avec Sampling) : {f1_sampling_opt:.4f}")
+        
+                similarity_percentage_opt = np.mean(y_pred_sampling_opt == y_pred_no_sampling_opt) * 100
+        
+                print(f"   - Similarité des prédictions entre modèles : {similarity_percentage_opt:.2f}%")
+                
+
+                #  Calcul des scores sur TRAIN apres optimisation 
+                y_train_pred_opt = best_model.predict(X_train_used)
+                train_accuracy_after = accuracy_score(y_train_used, y_train_pred_opt)
+                train_f1_after = f1_score(y_train, y_train_pred_opt, average="weighted")
+                
+                #  Calcul des scores sur TEST apres optimisation 
+                y_pred_opt = best_model.predict(X_test)
                 accuracy_after = accuracy_score(y_test, y_pred_opt)
                 f1_after = f1_score(y_test, y_pred_opt, average="weighted")
 
             print(f"\n Modèle après optimisation ({model_name}):")
+            print(f"   - Accuracy Train: {train_accuracy_after:.4f}")
             print(f"   - Accuracy Test: {accuracy_after:.4f}")
-            print(f"   - F1-score Test: {f1_after:.4f}")  
-    
+            print(f"   - F1-score Train: {train_f1_after:.4f}")
+            print(f"   - F1-score Test: {f1_after:.4f}")
+
+            #  Vérification de l'overfitting / underfitting après optimisation
+            if train_accuracy_after > accuracy_after + 0.10:
+                print(" Overfitting détecté après optimisation !")
+            elif train_accuracy_after < 0.7 and accuracy_after < 0.7:
+                print(" Underfitting détecté après optimisation !")
+            else:
+                print(" Bon équilibre entre biais et variance après optimisation.")
+                               
 
             # Sauvegarde du meilleur modèle
             if config["save_best_model"]:
@@ -255,6 +401,32 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
             "F1-score Après": f1_after
         }])], ignore_index=True)
         
+        
+
+        # 📌 Vérification si on est bien entré dans la collecte des résultats
+        print(f" [DEBUG] Début de la collecte des résultats pour l'itération {iteration}...")
+        
+        #  Enregistrement des résultats dans results_log.txt avec collect_results
+        iteration_results =collect_results(
+            iteration, config, file_path, target_column, sampling_status, sampling_time,
+            train_percent, num_train_sampled, test_percent, num_test_sampled,
+            model_name, model, model.get_params(), train_time_before,
+            accuracy_before, f1_before, train_time_after, best_params,
+            accuracy_after, f1_after
+        )
+
+        
+        #  Vérification si collect_results() a retourné un dictionnaire valide
+        print(f" [DEBUG] Résultats collectés pour l'itération {iteration}:")
+        print(json.dumps(iteration_results, indent=4, ensure_ascii=False))
+        
+        #  Enregistrement des résultats
+        print(f" [DEBUG] Enregistrement des résultats dans results_log.txt...")
+        save_results(iteration_results)
+        print(f" [DEBUG] Résultats enregistrés avec succès !")
+
+
+
 # Sauvegarde des résultats
 # Définition du chemin du fichier Excel
 excel_path = f"resultats_{model_name}_{sampling_status}_{os.path.basename(file_path).split('.')[0]}.xlsx"
