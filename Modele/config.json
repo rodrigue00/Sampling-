@@ -1,5 +1,5 @@
 {
-  "file_path": "data/dataP/preprocessed_iris_dataset.csv",
+  "file_path": "data/dataP/preprocessed_thyroid_cancer_risk_dataset.csv",
   "random_state": 0,
 
   "sampling": {
@@ -64,7 +64,7 @@
 
   "save_best_model": false,
   "model_save_path": "best_model.pkl",
-  "target_column": "species",
+  "target_column": "diagnosis",
 
-  "num_iterations": 2
+  "num_iterations": 10
 }

@@ -14,9 +14,6 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from xgboost import XGBClassifier
 
-# Import collection des resultat
-from resultat.collect_results import collect_results
-
 # Import sécurisé de gmm_sampling
 try:
     from sampling.gmm_sampling import gmm_sampling
@@ -28,7 +25,6 @@ try:
     from sampling.ddbs_sampling import diversified_distance_based_sampling
 except ModuleNotFoundError:
     raise ImportError("Impossible d'importer ddbs_sampling. Vérifiez le chemin du fichier.")
-
 
 # Charger la configuration depuis config.json
 with open("config.json", "r") as config_file:
@@ -57,8 +53,7 @@ columns = [
 results_df = pd.DataFrame(columns=columns)
 
 
-# Exécuter 30 itérations
-
+# Boucle d'itérations
 for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours"):
     print(f"\n Exécution de l'itération {iteration}...\n")
 
@@ -172,7 +167,6 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
         print(f"   - Accuracy Test: {accuracy_before:.4f}")
         print(f"   - F1-score Test: {f1_before:.4f}")
 
-
         best_params = {}
         best_model = model
         accuracy_after, f1_after = "Non optimisé", "Non optimisé"
@@ -227,7 +221,6 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
             print(f"   - Accuracy Test: {accuracy_after:.4f}")
             print(f"   - F1-score Test: {f1_after:.4f}")  
     
-
             # Sauvegarde du meilleur modèle
             if config["save_best_model"]:
                 model_filename = f"best_model_{model_name}.pkl"
@@ -257,7 +250,7 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
         
 # Sauvegarde des résultats
 # Définition du chemin du fichier Excel
-excel_path = f"resultats_{model_name}_{sampling_status}_{os.path.basename(file_path).split('.')[0]}.xlsx"
+excel_path = f"resultat/excel/resultats_{model_name}_{sampling_status}_{os.path.basename(file_path).split('.')[0]}.xlsx"
 
 # Vérifier si le fichier existe
 if os.path.exists(excel_path):

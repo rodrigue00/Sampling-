@@ -1,0 +1,200 @@
+### Itération 1 - XGBoost ###
+{
+    "Itération": 1,
+    "Dataset utilisé": "data/dataP/preprocessed_iris_dataset.csv",
+    "Colonne cible": "species",
+    "Échantillonnage": "Oui (DDBS - euclidean, geometric)",
+    "Tps Sampling": 0.01,
+    "Entrain %": 15.0,
+    "Nbre Entrain": 15,
+    "Test %": 20.0,
+    "Nbre Test": 20,
+    "Modèle": "XGBoost",
+    "Paramètres initiaux": {
+        "learning_rate": 0.1,
+        "max_depth": 6,
+        "n_estimators": 100
+    },
+    "Tps Entrain Avant": 0.05,
+    "Accuracy Avant": 1.0,
+    "F1-score Avant": 1.0,
+    "Tps Entrain Après": 0.05,
+    "Paramètres optimisés": {
+        "n_estimators": 68,
+        "max_depth": 14,
+        "learning_rate": 0.03603458332672646
+    },
+    "Accuracy Après": 1.0,
+    "F1-score Après": 1.0,
+    "Accuracy Train Avant": 1.0,
+    "F1-score Train Avant": 1.0,
+    "Accuracy Test (Sans Sampling)": 1.0,
+    "F1-score Test (Sans Sampling)": 1.0,
+    "Accuracy Test (Avec Sampling)": 1.0,
+    "F1-score Test (Avec Sampling)": 1.0,
+    "Similarité Prédictions (Avant Opti)": 100.0,
+    "Accuracy Test (Sans Sampling - Opti)": 1.0,
+    "F1-score Test (Sans Sampling - Opti)": 1.0,
+    "Accuracy Test (Avec Sampling - Opti)": 1.0,
+    "F1-score Test (Avec Sampling - Opti)": 1.0,
+    "Similarité Prédictions (Après Opti)": 100.0,
+    "Accuracy Train Après": 1.0,
+    "F1-score Train Après": 1.0,
+    "Sampling DDBS": {
+        "distance_metric": "euclidean",
+        "distribution_type": "geometric",
+        "percentage_per_class": 0.2,
+        "total_selected_samples": 15
+    }
+}
+
+### Itération 2 - XGBoost ###
+{
+    "Itération": 2,
+    "Dataset utilisé": "data/dataP/preprocessed_iris_dataset.csv",
+    "Colonne cible": "species",
+    "Échantillonnage": "Oui (DDBS - euclidean, geometric)",
+    "Tps Sampling": 0.01,
+    "Entrain %": 16.0,
+    "Nbre Entrain": 16,
+    "Test %": 20.0,
+    "Nbre Test": 20,
+    "Modèle": "XGBoost",
+    "Paramètres initiaux": {
+        "learning_rate": 0.1,
+        "max_depth": 6,
+        "n_estimators": 100
+    },
+    "Tps Entrain Avant": 0.05,
+    "Accuracy Avant": 1.0,
+    "F1-score Avant": 1.0,
+    "Tps Entrain Après": 0.16,
+    "Paramètres optimisés": {
+        "n_estimators": 429,
+        "max_depth": 16,
+        "learning_rate": 0.06217631254325639
+    },
+    "Accuracy Après": 1.0,
+    "F1-score Après": 1.0,
+    "Accuracy Train Avant": 1.0,
+    "F1-score Train Avant": 1.0,
+    "Accuracy Test (Sans Sampling)": 1.0,
+    "F1-score Test (Sans Sampling)": 1.0,
+    "Accuracy Test (Avec Sampling)": 1.0,
+    "F1-score Test (Avec Sampling)": 1.0,
+    "Similarité Prédictions (Avant Opti)": 100.0,
+    "Accuracy Test (Sans Sampling - Opti)": 1.0,
+    "F1-score Test (Sans Sampling - Opti)": 1.0,
+    "Accuracy Test (Avec Sampling - Opti)": 1.0,
+    "F1-score Test (Avec Sampling - Opti)": 1.0,
+    "Similarité Prédictions (Après Opti)": 100.0,
+    "Accuracy Train Après": 1.0,
+    "F1-score Train Après": 1.0,
+    "Sampling DDBS": {
+        "distance_metric": "euclidean",
+        "distribution_type": "geometric",
+        "percentage_per_class": 0.2,
+        "total_selected_samples": 16
+    }
+}
+
+### Itération 1 - XGBoost ###
+{
+    "Itération": 1,
+    "Dataset utilisé": "data/dataP/preprocessed_iris_dataset.csv",
+    "Colonne cible": "species",
+    "Échantillonnage": "Oui (DDBS - euclidean, geometric)",
+    "Tps Sampling": 0.01,
+    "Entrain %": 15.0,
+    "Nbre Entrain": 15,
+    "Test %": 20.0,
+    "Nbre Test": 20,
+    "Modèle": "XGBoost",
+    "Paramètres initiaux": {
+        "learning_rate": 0.1,
+        "max_depth": 6,
+        "n_estimators": 100
+    },
+    "Tps Entrain Avant": 0.04,
+    "Accuracy Avant": 1.0,
+    "F1-score Avant": 1.0,
+    "Tps Entrain Après": 0.31,
+    "Paramètres optimisés": {
+        "n_estimators": 63,
+        "max_depth": 20,
+        "learning_rate": 0.0705152196281784
+    },
+    "Accuracy Après": 1.0,
+    "F1-score Après": 1.0,
+    "Accuracy Train Avant": 1.0,
+    "F1-score Train Avant": 1.0,
+    "Accuracy Test (Sans Sampling)": 1.0,
+    "F1-score Test (Sans Sampling)": 1.0,
+    "Accuracy Test (Avec Sampling)": 1.0,
+    "F1-score Test (Avec Sampling)": 1.0,
+    "Similarité Prédictions (Avant Opti)": 100.0,
+    "Accuracy Test (Sans Sampling - Opti)": 1.0,
+    "F1-score Test (Sans Sampling - Opti)": 1.0,
+    "Accuracy Test (Avec Sampling - Opti)": 1.0,
+    "F1-score Test (Avec Sampling - Opti)": 1.0,
+    "Similarité Prédictions (Après Opti)": 100.0,
+    "Accuracy Train Après": 1.0,
+    "F1-score Train Après": 1.0,
+    "Sampling DDBS": {
+        "distance_metric": "euclidean",
+        "distribution_type": "geometric",
+        "percentage_per_class": 0.2,
+        "total_selected_samples": 15
+    }
+}
+
+### Itération 2 - XGBoost ###
+{
+    "Itération": 2,
+    "Dataset utilisé": "data/dataP/preprocessed_iris_dataset.csv",
+    "Colonne cible": "species",
+    "Échantillonnage": "Oui (DDBS - euclidean, geometric)",
+    "Tps Sampling": 0.01,
+    "Entrain %": 15.0,
+    "Nbre Entrain": 15,
+    "Test %": 20.0,
+    "Nbre Test": 20,
+    "Modèle": "XGBoost",
+    "Paramètres initiaux": {
+        "learning_rate": 0.1,
+        "max_depth": 6,
+        "n_estimators": 100
+    },
+    "Tps Entrain Avant": 0.07,
+    "Accuracy Avant": 1.0,
+    "F1-score Avant": 1.0,
+    "Tps Entrain Après": 0.16,
+    "Paramètres optimisés": {
+        "n_estimators": 422,
+        "max_depth": 12,
+        "learning_rate": 0.02174508768250832
+    },
+    "Accuracy Après": 1.0,
+    "F1-score Après": 1.0,
+    "Accuracy Train Avant": 1.0,
+    "F1-score Train Avant": 1.0,
+    "Accuracy Test (Sans Sampling)": 1.0,
+    "F1-score Test (Sans Sampling)": 1.0,
+    "Accuracy Test (Avec Sampling)": 1.0,
+    "F1-score Test (Avec Sampling)": 1.0,
+    "Similarité Prédictions (Avant Opti)": 100.0,
+    "Accuracy Test (Sans Sampling - Opti)": 1.0,
+    "F1-score Test (Sans Sampling - Opti)": 1.0,
+    "Accuracy Test (Avec Sampling - Opti)": 1.0,
+    "F1-score Test (Avec Sampling - Opti)": 1.0,
+    "Similarité Prédictions (Après Opti)": 100.0,
+    "Accuracy Train Après": 1.0,
+    "F1-score Train Après": 1.0,
+    "Sampling DDBS": {
+        "distance_metric": "euclidean",
+        "distribution_type": "geometric",
+        "percentage_per_class": 0.2,
+        "total_selected_samples": 15
+    }
+}
+
