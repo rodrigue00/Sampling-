@@ -1,0 +1,20 @@
+
+Échantillonnage: Non
+ - Médiane: 0.8183 (Médiane basse (distribution asymétrique à droite))
+ - Moyenne: 0.8188
+ - 1er Quartile (Q1): 0.8179
+ - 3ème Quartile (Q3): 0.8198
+ - Écart-type: 0.0016
+ - Variance: 0.0000
+ - Petite moustache min: 0.8155
+ - Petite moustache max: 0.8223
+
+Échantillonnage: Oui (GMM)
+ - Médiane: 0.7852 (Médiane basse (distribution asymétrique à droite))
+ - Moyenne: 0.7853
+ - 1er Quartile (Q1): 0.7787
+ - 3ème Quartile (Q3): 0.7973
+ - Écart-type: 0.0151
+ - Variance: 0.0002
+ - Petite moustache min: 0.7570
+ - Petite moustache max: 0.8126

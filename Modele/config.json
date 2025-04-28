@@ -1,9 +1,9 @@
 {
-  "file_path": "data/dataP/preprocessed_thyroid_cancer_risk_dataset.csv",
+  "file_path": "data/dataP/preprocessed_iris_dataset.csv",
   "random_state": 0,
 
   "sampling": {
-    "enabled": true,
+    "enabled": false,
     "fraction": 0.2,
 
     "gmm": {
@@ -17,7 +17,7 @@
     },
 
     "ddbs": {
-      "enabled": true,
+      "enabled": false,
       "percentage_per_class": 0.2,
       "distance_metric": "euclidean",
       "distribution_type": "geometric"
@@ -64,7 +64,7 @@
 
   "save_best_model": false,
   "model_save_path": "best_model.pkl",
-  "target_column": "diagnosis",
+  "target_column": "species",
 
-  "num_iterations": 10
+  "num_iterations": 30
 }

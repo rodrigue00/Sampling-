@@ -18,7 +18,7 @@ Le jeu de données comprend 150 observations, réparties également entre les tr
     """
 
 # Charger le dataset fourni
-file_path = '../data/iris.csv'
+file_path = './data/iris.csv'
 df = pd.read_csv(file_path)
 print(" Données chargées avec succès.")
 
@@ -26,12 +26,13 @@ print(" Données chargées avec succès.")
 print("\n Valeurs uniques dans la colonne 'species' avant traitement :")
 print(df['species'].unique())
 
-# Supprimer des lignes avec la classe 'virginica'
-df = df[df['species'].isin(['setosa', 'versicolor'])]
+# Remplacer les valeurs par des étiquettes numériques (0, 1, 2)
+df['species'] = df['species'].map({
+    'setosa': 0,
+    'versicolor': 1,
+    'virginica': 2
+})
 
-# Remplacer les valeurs par des étiquettes binaires
-df['species'].replace({'versicolor': 0}, inplace=True)
-df['species'].replace({'setosa': 1}, inplace=True)
 
 # Définition de la colonne cible
 target_column = "species"
@@ -44,9 +45,10 @@ print("\n Valeurs uniques dans la colonne 'species' après traitement :")
 print(df['species'].unique())
 
 # Sauvegarde du DataFrame prétraité dans un nouveau fichier CSV
-output_file = '../data/preprocessed_iris_dataset.csv'
+output_file = './data/preprocessed_iris_dataset.csv'
 df.to_csv(output_file, index=False)
 print(f"\n Nouveau fichier CSV enregistré sous '{output_file}'.")
 
 # Affichage des premières lignes du dataset prétraité
 df.head()
+

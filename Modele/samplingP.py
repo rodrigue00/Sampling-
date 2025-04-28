@@ -58,12 +58,31 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
     print(f"\n Exécution de l'itération {iteration}...\n")
 
      # Séparation des données en Train/Test avant sampling
-    test_size = config["train_test_split"]["test_size"]
+   
     X = df.drop(columns=[target_column])
     y = df[target_column]
 
-    # Division des données
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+     # Sampling personnalisé (20% par classe pour train, 20% global pour test) 
+    df_combined = pd.concat([X, y], axis=1)
+    
+    # Liste pour stocker les sous-échantillons par classe
+    train_subsamples = []
+    
+    # Sampling 20 % par classe pour l'entraînement
+    for class_label in df_combined[target_column].unique():
+        class_subset = df_combined[df_combined[target_column] == class_label]
+        sampled_class = class_subset.sample(frac=0.2)
+        train_subsamples.append(sampled_class)
+    train_data = pd.concat(train_subsamples)
+
+    # Séparer X_train et y_train
+    X_train = train_data.drop(columns=[target_column])
+    y_train = train_data[target_column]
+
+    # Sampling 20 % aléatoire sur tout le dataset pour le test
+    test_data = df_combined.sample(frac=0.2)
+    X_test = test_data.drop(columns=[target_column])
+    y_test = test_data[target_column]
     
     #  Appliquer le sampling UNIQUEMENT sur les données d'entraînement
     start_sampling_time = time.time()
@@ -255,7 +274,7 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
         
 # Sauvegarde des résultats
 # Définition du chemin du fichier Excel
-excel_path = f"resultat/excel/resultats_{model_name}_{os.path.basename(file_path).split('.')[0]}.xlsx"
+excel_path = f"resultat/excel1/resultats_{model_name}_{os.path.basename(file_path).split('.')[0]}.xlsx"
 
 # Vérifier si le fichier existe
 if os.path.exists(excel_path):

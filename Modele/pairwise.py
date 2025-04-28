@@ -26,6 +26,12 @@ try:
 except ModuleNotFoundError:
     raise ImportError("Impossible d'importer ddbs_sampling. Vérifiez le chemin du fichier.")
 
+try:
+    from sampling.pairwise_sampling import pairwise_sampling
+except ModuleNotFoundError:
+    raise ImportError("Impossible d'importer pairwise_sampling. Vérifiez le chemin du fichier.")
+
+
 # Charger la configuration depuis config.json
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
@@ -93,6 +99,14 @@ for iteration in tqdm(range(1, num_iterations  + 1), desc=" Itérations en cours
             y_train_sampled = df_train_sampled[target_column]
             sampling_status = f"Oui (DDBS - {config['sampling']['ddbs']['distance_metric']}, {config['sampling']['ddbs']['distribution_type']})"
             print("Échantillonnage DDBS appliqué.")
+            
+        elif config["sampling"]["pairwise"]["enabled"]:
+             df_train_sampled = pairwise_sampling(pd.concat([X_train, y_train], axis=1), target_column, config)
+             X_train_sampled = df_train_sampled.drop(columns=[target_column])
+             y_train_sampled = df_train_sampled[target_column]
+             sampling_status = "Oui (Pairwise)"
+             print("Échantillonnage Pairwise par classe appliqué.")
+
         
         # Si le type est inconnu, lever une erreur
         else:

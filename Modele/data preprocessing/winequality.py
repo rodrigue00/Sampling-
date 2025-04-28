@@ -1,8 +1,4 @@
 
-
-import pandas as pd
-
-
 """
     Description du jeu de Données "winequality-red"
 
@@ -26,7 +22,9 @@ Attributs :
 
 
     """
-file_path = '../data/winequality-red.csv'
+import pandas as pd
+
+file_path = 'data/winequality-red.csv'
 df = pd.read_csv(file_path)
 print(" Données chargées avec succès.")
 
@@ -35,19 +33,30 @@ print("\n Vérification des valeurs manquantes :")
 missing_data = df.isnull().sum()
 print(missing_data)
 
-# Étape 2 : Création d'une colonne binaire pour la qualité du vin
-df['is_good'] = (df['quality'] >= round(df['quality'].mean())).astype(int)
-print("\n Création de la colonne binaire 'is_good' effectuée.")
-
-# Suppression de la colonne 'quality' car elle est remplacée par 'is_good'
-df.drop(['quality'], axis=1, inplace=True)
-print(" Colonne 'quality' supprimée.")
-
 # Vérification des nouvelles colonnes
 print("\n Aperçu des premières lignes du DataFrame après transformation :")
 print(df.head())
 
+# Quality classes :
+df.quality.unique()
+
+# Étape 1 : transformer les notes en labels textuels
+df['quality'] = df['quality'].apply(lambda x: 'Good' if x >= 6 else 'Bad')
+
+# Étape 2 : remplacer Good → 1, Bad → 0
+df['quality'] = df['quality'].replace({'Good': 1, 'Bad': 0})
+
+# Définition de la colonne cible pour la modélisation
+target_column = "quality"
+
+# Vérification de la présence de la colonne cible dans les données
+if target_column not in df.columns:
+    raise ValueError(f" La colonne cible '{target_column}' est absente des données.")
+print(f" Colonne cible définie : {target_column}")
+
 # Sauvegarde du DataFrame prétraité dans un nouveau fichier CSV
-output_file = '../data/preprocessed_winequality_dataset.csv'
+output_file = 'data/preprocessed_winequality_dataset.csv'
 df.to_csv(output_file, index=False)
 print(f"\n Nouveau fichier CSV enregistré sous '{output_file}'.")
+
+

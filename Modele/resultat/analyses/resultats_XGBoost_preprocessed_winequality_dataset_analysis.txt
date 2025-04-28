@@ -1,0 +1,40 @@
+
+Échantillonnage: Non
+ - Médiane: 0.8297 (Médiane haute (distribution asymétrique à gauche))
+ - Moyenne: 0.8282
+ - 1er Quartile (Q1): 0.8187
+ - 3ème Quartile (Q3): 0.8367
+ - Écart-type: 0.0189
+ - Variance: 0.0004
+ - Petite moustache min: 0.7937
+ - Petite moustache max: 0.8906
+
+Échantillonnage: Oui (DDBS - euclidean, geometric)
+ - Médiane: 0.7484 (Médiane basse (distribution asymétrique à droite))
+ - Moyenne: 0.7544
+ - 1er Quartile (Q1): 0.7359
+ - 3ème Quartile (Q3): 0.7688
+ - Écart-type: 0.0234
+ - Variance: 0.0005
+ - Petite moustache min: 0.7188
+ - Petite moustache max: 0.8063
+
+Échantillonnage: Oui (GMM)
+ - Médiane: 0.7312 (Médiane haute (distribution asymétrique à gauche))
+ - Moyenne: 0.7286
+ - 1er Quartile (Q1): 0.7102
+ - 3ème Quartile (Q3): 0.7453
+ - Écart-type: 0.0205
+ - Variance: 0.0004
+ - Petite moustache min: 0.6937
+ - Petite moustache max: 0.7656
+
+Échantillonnage: Oui (Random)
+ - Médiane: 0.7469 (Médiane basse (distribution asymétrique à droite))
+ - Moyenne: 0.7509
+ - 1er Quartile (Q1): 0.7344
+ - 3ème Quartile (Q3): 0.7688
+ - Écart-type: 0.0249
+ - Variance: 0.0006
+ - Petite moustache min: 0.7000
+ - Petite moustache max: 0.7969
